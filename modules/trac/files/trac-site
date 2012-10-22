@@ -1,0 +1,22 @@
+ScriptAlias /trac /var/www/trac/cgi-bin/trac.fcgi
+
+DefaultInitEnv TRAC_ENV_PARENT_DIR "/var/lib/trac"
+DefaultInitEnv PYTHON_EGG_CACHE "/var/cache/trac/plugins"
+
+<LocationMatch "/trac/[^/]+/login">
+    AuthType Basic
+    AuthName "Trac"
+    AuthUserFile /var/lib/trac/htpasswd
+    Require valid-user
+</LocationMatch>
+
+<Directory "/var/www/trac">
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+<Directory "/var/www/trac/cgi-bin">
+    Options ExecCGI
+</Directory>
+

@@ -7,7 +7,7 @@ Vagrant::Config.run do |config|
   #basic settings
   ######################################
   config.vm.box = "ubuntu12"
-  config.vm.host_name = "IZAZIDEV"
+  config.vm.host_name = "dev-tools"
   #config.vm.network :hostonly, "192.168.33.10"
   config.vm.network :bridged
   #Uncomment the next line if you want the GUI, otherwise use vagrant ssh
@@ -23,7 +23,7 @@ Vagrant::Config.run do |config|
   #host machine/network specific settings!
   ######################################
   #if you are behind a proxy then you need to tell apt about it, add apt.conf to the data directory with the following line:
-  #Acquire::http::Proxy "http://user:pass001@izaziproxy.izazi.com:80/";
+  #Acquire::http::Proxy "http://user:pass001@host:port/";
   if File.exist?("./data/apt.conf") then
     config.vm.provision :shell, :inline => "cp /vagrant_data/apt.conf /etc/apt/"
   end
@@ -44,8 +44,22 @@ Vagrant::Config.run do |config|
   
   #modify system configurations
   config.vm.customize ["modifyvm", :id,
-                       "--name", "IZAZI-Development Tools",
+                       "--name", "Development Tools",
                        "--memory", "1024"]
+                       
+  config.vm.provision :puppet, :options => "--verbose --debug"
+  
+  #GitBlit install
+  config.vm.provision :puppet do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.manifest_file = "gitblit.pp"
+  end
+
+
+  
+  #Trac Install, including agilo
+  
+  #setup backups
 
  
 end

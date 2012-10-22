@@ -8,24 +8,15 @@ package { "curl":
 }
 
 #install gitblit
-#class {'gitblit': }
-
-
-#TODO: install agilo using the trac::plugin definition
+#class {'gitblit': } -> 
 
 trac::project {"Izazi":
-	repository_path		=>	"/home/vagrant/repo/puppet-trac",
+	repository_path		=>	"/home/vagrant/repo/puppet-trac/.git",
 	description			=>  "Default Project",
 	config				=>	"defaults",
-}
+} 
 
-trac::admin {"Permissions":
-	project		=>	"Izazi",
-	user			=>  "vagrant",
-}
+agilo::project {"Izazi": }
 
+trac::project['Izazi'] -> agilo::project['Izazi']
 
-class {'trac::www::basic': }
-class {'trac::plugin::sitemap': }
-class {'trac::plugin::batchmodify': }
-class {'agilo': }

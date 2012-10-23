@@ -6,6 +6,7 @@ Vagrant::Config.run do |config|
   ######################################
   #basic settings
   ######################################
+  use_proxy="false"
   config.vm.box = "ubuntu12"
   config.vm.host_name = "dev-tools"
   #config.vm.network :hostonly, "192.168.33.10"
@@ -19,9 +20,8 @@ Vagrant::Config.run do |config|
   #shared folders, used to fetch the deployments or other items
   config.vm.share_folder "v-data", "/vagrant_data", "./data"
   
-  #create the shared folders that we will use for git repos and trac data
-  config.vm.share_folder "git-data", "/usr/local/gitblit/current/git", "./repos"
-  config.vm.share_folder "trac-data", "/var/lib/trac/", "./trac_data"
+  #the folder that will hold all the git repos, important!
+  config.vm.share_folder "got-repos", "/media/git", "./repos"
   
   #modify system configurations
   config.vm.customize ["modifyvm", :id,
@@ -33,13 +33,13 @@ Vagrant::Config.run do |config|
   ######################################
   #if you are behind a proxy then you need to tell apt, git about it and set the environment variables
   #Acquire::http::Proxy "http://user:pass001@host:port/";
-  if File.exist?("./data/apt.conf") then
+  if File.exist?("./data/apt.conf") && (use_proxy=="true") then
     config.vm.provision :shell, :inline => "cp /vagrant_data/apt.conf /etc/apt/"
   end
-  if File.exist?("./data/.gitconfig") then
+  if File.exist?("./data/.gitconfig") && (use_proxy=="true") then
     config.vm.provision :shell, :inline => "cp /vagrant_data/.gitconfig /home/vagrant/"
   end
-  if File.exist?("./scripts/exportProxy.sh") then
+  if File.exist?("./scripts/exportProxy.sh") && (use_proxy=="true") then
     config.vm.provision :shell, :path => "scripts/exportProxy.sh"
   end
   

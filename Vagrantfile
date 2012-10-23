@@ -19,6 +19,10 @@ Vagrant::Config.run do |config|
   #shared folders, used to fetch the deployments or other items
   config.vm.share_folder "v-data", "/vagrant_data", "./data"
   
+  #create the shared folders that we will use for git repos and trac data
+  config.vm.share_folder "git-data", "/usr/local/gitblit/current/git", "./repos"
+  config.vm.share_folder "trac-data", "/var/lib/trac/", "./trac_data"
+  
   #modify system configurations
   config.vm.customize ["modifyvm", :id,
                        "--name", "Development Tools",

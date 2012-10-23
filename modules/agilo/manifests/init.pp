@@ -35,7 +35,7 @@ class agilo  {
         returns => [0,1,2],
       }
 	
-	  exec {"restart-apache2-after-agilo":
+	  exec {"restart-apache2-after-agilo-$name":
   	    command => "/etc/init.d/apache2 restart",
   	    require => Exec["upgrade-trac-env-$name"],
       }

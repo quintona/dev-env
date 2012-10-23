@@ -42,7 +42,13 @@ class trac {
   }
 
 
-  #TODO: add trac and git hooks
+  file { ["/usr/share/trac/hooks", "/usr/share/trac", "/usr/share/trac/templates"]: 
+    ensure => directory
+  }
+
+  file { ["/var/www/trac/cgi-bin/trac.cgi", "/var/www/trac/cgi-bin/trac.fcgi"]:
+    mode => 755
+  }
   
   #create a trac admin user
   exec { "trac-admin-user-htpasswd":
@@ -71,12 +77,13 @@ class trac {
     # Create the trac project
     exec { "trac-initenv-$name":
       # Add a chmod -R g+w to fix permissions
-      command => "trac-admin /var/lib/trac/$name initenv $name sqlite:db/trac.db git file://$real_repository_path && chmod -R g+w /var/lib/trac/$name/*",
+      command => "trac-admin /var/lib/trac/$name initenv $name sqlite:db/trac.db git file://$real_repository_path && /bin/chmod -R g+w /var/lib/trac/$name/*",
       path => "/usr/bin",
       user => "www-data",
       group => "www-data",
       creates => "/var/lib/trac/$name/db/trac.db",
-      require => [File["/var/lib/trac/$name"], Package[trac-git]]
+      require => [File["/var/lib/trac/$name"], Package[trac-git]],
+      returns => [0,1,2],
     }
     
     
@@ -106,7 +113,7 @@ class trac {
 
     # Should be executed only by the first project
     exec { "tracadmin-deploy-$name":
-      command => "trac-admin /var/lib/trac/$name deploy /var/www/trac && chmod +x /var/www/trac/cgi-bin/trac.cgi /var/www/trac/cgi-bin/trac.fcgi",
+      command => "trac-admin /var/lib/trac/$name deploy /var/www/trac && /bin/chmod +x /var/www/trac/cgi-bin/trac.cgi /var/www/trac/cgi-bin/trac.fcgi",
       path => "/usr/bin",
       creates => "/var/www/trac/cgi-bin/trac.cgi",
       require => Exec["trac-initenv-$name"]
@@ -116,11 +123,6 @@ class trac {
   file { "/usr/local/bin/trac-robotstxt":
     source => "puppet:///trac/trac-robotstxt",
     mode => 755
-  }
-
-  file { "/usr/share/trac":
-    ensure => directory,
-    require => Package[trac]
   }
 
   file { "/usr/share/trac/plugins":

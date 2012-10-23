@@ -2,13 +2,7 @@ trac::project {"Izazi":
 	repository_path	=>	"/home/vagrant/dev-env/.git",
 	description	=>  "Default Project",
 	config => "defaults",
-	stage => first
-} -> agilo::project {"Izazi": 
-	require => trac::project['Izazi'],
-	stage => last,
-} -> class {'gitblit': 
-	stage => main
-}
+} -> agilo::project {"Izazi": require => trac::project['Izazi'], } -> class {'gitblit': }
 
 
 # Improvemens: 

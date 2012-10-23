@@ -6,6 +6,9 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
 	$current_dir = "${parent_dir}/current"
 	$daemon_script = "gitblit-ubuntu"
 	
+	package { "unzip": ensure => latest }
+	package { "curl": ensure => latest }
+	
 	group { 'gitblit':, ensure => present }
 	user { 'gitblit':
 		ensure => present,
@@ -21,6 +24,7 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
     	creates => "/var/tmp/${download_file}",
     	path => ["/bin", "/usr/bin"],
     	logoutput => true,
+    	requires => Package['curl'],
     	unless => "/usr/bin/test -d '${version_dir}'"
 	}
 
@@ -45,7 +49,7 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
 		user => 'gitblit', group => 'gitblit',
 	    creates => "${version_dir}/ext",
 	    path => ["/bin", "/usr/bin"],
-	    require => [ Exec['gitblit_download'], File['gitblit-home'], Group['gitblit'], User['gitblit'] ],
+	    require => [ Exec['gitblit_download'], Package['unzip'], File['gitblit-home'], Group['gitblit'], User['gitblit'] ],
 	    unless => "/usr/bin/test -d '${version_dir}/ext'"
 	}
 

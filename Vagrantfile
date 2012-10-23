@@ -35,25 +35,22 @@ Vagrant::Config.run do |config|
   #install java
   config.vm.provision :shell, :path => "scripts/installJdk.sh"
   
-  #TODO: validate this puppet code, simply use bash for the moment. 
-  #config.vm.provision :puppet, 
-  #:options => "--verbose --trace" do |puppet|
-  #  puppet.manifests_path = "manifests"
-  #  puppet.manifest_file = "init.pp"
-  #end
+  config.vm.provision :shell, :inline => "apt-get install git"
   
   #modify system configurations
   config.vm.customize ["modifyvm", :id,
                        "--name", "Development Tools",
                        "--memory", "1024"]
-                       
-  config.vm.provision :puppet, :options => "--verbose --debug"
+  
+  #setup GIT
+  #clone provisioning repo
+  #puppet apply
   
   #GitBlit install
-  config.vm.provision :puppet do |puppet|
-    puppet.manifests_path = "manifests"
-    puppet.manifest_file = "gitblit.pp"
-  end
+  #config.vm.provision :puppet do |puppet|
+  #  puppet.manifests_path = "manifests"
+  #  puppet.manifest_file = "init.pp"
+  #end
 
 
   

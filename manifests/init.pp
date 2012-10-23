@@ -1,14 +1,7 @@
 #Ensure we have unzip and curl in place as they are required for gitblit
-package { "unzip":
-	ensure => "installed"
 
-}
-package { "curl":
-	ensure => "installed"
-}
 
-#install gitblit
-#class {'gitblit': } -> 
+class {'gitblit': }
 
 trac::project {"Izazi":
 	repository_path		=>	"/home/vagrant/repo/puppet-trac/.git",
@@ -18,5 +11,11 @@ trac::project {"Izazi":
 
 agilo::project {"Izazi": }
 
-trac::project['Izazi'] -> agilo::project['Izazi']
+Class['gitblit'] -> trac::project['Izazi'] -> agilo::project['Izazi']
+
+# Improvemens: 
+# - LDAP Integration
+# - Single sign on
+# - portal
+# 
 

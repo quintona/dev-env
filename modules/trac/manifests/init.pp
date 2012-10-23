@@ -147,12 +147,13 @@ class trac {
     replace => true,
   }
   
-  file {"/etc/apache2/httpd.conf":
-  	content => "ServerName dev-tools"
+  file_line { 'httpd_host':
+     path => '/etc/apache2/httpd.conf',
+     line => 'ServerName dev-tools',	
   }
   
   exec {"restart-apache2":
   	command => "/etc/init.d/apache2 restart",
-  	require => [File["/etc/apache2/sites-enabled/trac-site"],File["/etc/apache2/sites-available/trac-site"],File["/etc/apache2/httpd.conf"]],
+  	require => [File["/etc/apache2/sites-enabled/trac-site"],File["/etc/apache2/sites-available/trac-site"],file_line["httpd_host"]],
   }
 }

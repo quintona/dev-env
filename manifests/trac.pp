@@ -5,7 +5,7 @@ trac::project {"Izazi":
 } 
 
 trac::project {"MRS":
-	repository_path	=>	"/home/vagrant/MRS/.git",
+	repository_path	=>	"/usr/local/gitblit/current/git/MRS.git",
 	description	=>  "Medical Rebate System",
 	config => "defaults",
 }

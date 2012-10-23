@@ -55,7 +55,7 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
 
 	exec { gitblit_set_current:
 		command => "ln -s ${version_dir} ${parent_dir}/current",
-		creates => "/usr/local/nexus/current",
+		creates => "/usr/local/gitblit/current",
 		path => ["/bin", "/usr/bin"],
 		require => [ Exec['gitblit_extract'], Group['gitblit'], User['gitblit'] ]
 	}

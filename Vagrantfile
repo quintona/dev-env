@@ -69,8 +69,6 @@ Vagrant::Config.run do |config|
   	end
   	#do the rest of the provisioning (apply basically)
   	config.vm.provision :shell, :path => "scripts/initProvisioning.sh"
-  
-  	#TODO: setup backups
   end
 
  

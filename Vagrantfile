@@ -19,6 +19,11 @@ Vagrant::Config.run do |config|
   #shared folders, used to fetch the deployments or other items
   config.vm.share_folder "v-data", "/vagrant_data", "./data"
   
+  #modify system configurations
+  config.vm.customize ["modifyvm", :id,
+                       "--name", "Development Tools",
+                       "--memory", "1024"]
+  
   ######################################
   #host machine/network specific settings!
   ######################################
@@ -32,31 +37,19 @@ Vagrant::Config.run do |config|
   ######################################
   #Provisioning
   ######################################
-  #install java
-  config.vm.provision :shell, :path => "scripts/installJdk.sh"
+  #you must have downloaded java first!
+  if File.exist?("./data/jdk-6u35-linux-x64.bin") then
+  	config.vm.provision :shell, :path => "scripts/installJdk.sh"
   
-  config.vm.provision :shell, :inline => "apt-get install git"
+  	#don't download unless we have to
+  	if File.exist?("./data/agilo_source.tar.gz") then
+    	config.vm.provision :shell, :inline => "cp /vagrant_data/agilo_source.tar.gz /var/tmp"
+  	end
+  	#do the rest of the provisioning
+  	config.vm.provision :shell, :path => "initProvisioning.sh"
   
-  #modify system configurations
-  config.vm.customize ["modifyvm", :id,
-                       "--name", "Development Tools",
-                       "--memory", "1024"]
-  
-  #setup GIT
-  #clone provisioning repo
-  #puppet apply
-  
-  #GitBlit install
-  #config.vm.provision :puppet do |puppet|
-  #  puppet.manifests_path = "manifests"
-  #  puppet.manifest_file = "init.pp"
-  #end
-
-
-  
-  #Trac Install, including agilo
-  
-  #setup backups
+  	#TODO: setup backups
+  end
 
  
 end

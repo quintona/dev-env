@@ -1,10 +1,8 @@
-#Ensure we have unzip and curl in place as they are required for gitblit
-
 
 class {'gitblit': }
 
 trac::project {"Izazi":
-	repository_path		=>	"/home/vagrant/repo/puppet-trac/.git",
+	repository_path		=>	"/home/vagrant/dev-env/.git",
 	description			=>  "Default Project",
 	config				=>	"defaults",
 } 
@@ -17,5 +15,7 @@ Class['gitblit'] -> trac::project['Izazi'] -> agilo::project['Izazi']
 # - LDAP Integration
 # - Single sign on
 # - portal
-# 
+# - Sonar
+# - Thoughtworks GO
+# - Nexus
 

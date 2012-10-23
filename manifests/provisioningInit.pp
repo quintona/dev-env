@@ -15,7 +15,7 @@ exec {"get_stdlib":
 	require => Package['git'],
 }
 
-exec {"get_stdlib":
+exec {"link_stdlib":
 	command => "ln -s /home/vagrant/stdlib stdlib",
 	cwd => "/home/vagrant/dev-env/modules",
 	path => "/usr/bin",

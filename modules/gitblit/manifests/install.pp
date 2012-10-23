@@ -24,7 +24,7 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
     	creates => "/var/tmp/${download_file}",
     	path => ["/bin", "/usr/bin"],
     	logoutput => true,
-    	requires => Package['curl'],
+    	require => Package['curl'],
     	unless => "/usr/bin/test -d '${version_dir}'"
 	}
 

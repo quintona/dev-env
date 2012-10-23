@@ -1,12 +1,5 @@
 #!/bin/sh
-echo "Initializing provisioning"
-
-# Install git
-apt-get install git
-
-#get the provisioning scripts
-cd /home/vagrant
-git clone https://github.com/quintona/dev-env.git
+echo "Starting provisioning"
 
 #apply
 cd dev-env/manifests

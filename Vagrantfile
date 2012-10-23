@@ -27,10 +27,16 @@ Vagrant::Config.run do |config|
   ######################################
   #host machine/network specific settings!
   ######################################
-  #if you are behind a proxy then you need to tell apt about it, add apt.conf to the data directory with the following line:
+  #if you are behind a proxy then you need to tell apt, git about it and set the environment variables
   #Acquire::http::Proxy "http://user:pass001@host:port/";
   if File.exist?("./data/apt.conf") then
     config.vm.provision :shell, :inline => "cp /vagrant_data/apt.conf /etc/apt/"
+  end
+  if File.exist?("./data/.gitconfig") then
+    config.vm.provision :shell, :inline => "cp /vagrant_data/.gitconfig /home/vagrant/"
+  end
+  if File.exist?("./scripts/exportProxy.sh") then
+    config.vm.provision :shell, :path => "scripts/exportProxy.sh"
   end
   
   
@@ -45,8 +51,13 @@ Vagrant::Config.run do |config|
   	if File.exist?("./data/agilo_source.tar.gz") then
     	config.vm.provision :shell, :inline => "cp /vagrant_data/agilo_source.tar.gz /var/tmp"
   	end
-  	#do the rest of the provisioning
-  	config.vm.provision :shell, :path => "initProvisioning.sh"
+  	#get git installed and the repo cloned
+  	config.vm.provision :puppet do |puppet|
+    	puppet.manifests_path = "manifests"
+    	puppet.manifest_file = "provisioningInit.pp"
+  	end
+  	#do the rest of the provisioning (apply basically)
+  	config.vm.provision :shell, :path => "scripts/initProvisioning.sh"
   
   	#TODO: setup backups
   end

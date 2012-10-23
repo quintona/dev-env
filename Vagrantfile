@@ -46,10 +46,17 @@ Vagrant::Config.run do |config|
   #you must have downloaded java first!
   if File.exist?("./data/jdk-6u35-linux-x64.bin") then
   	config.vm.provision :shell, :path => "scripts/installJdk.sh"
+  	
+  	#make sure we update the package cache!
+  	config.vm.provision :shell, :inline => "apt-get update"
   
   	#don't download unless we have to
   	if File.exist?("./data/agilo_source.tar.gz") then
     	config.vm.provision :shell, :inline => "cp /vagrant_data/agilo_source.tar.gz /var/tmp"
+  	end
+  	#don't download unless we have to
+  	if File.exist?("./data/gitblit-1.1.0.zip") then
+    	config.vm.provision :shell, :inline => "cp /vagrant_data/gitblit-1.1.0.zip /var/tmp"
   	end
   	#get git installed and the repo cloned
   	config.vm.provision :puppet do |puppet|

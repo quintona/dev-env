@@ -1,4 +1,3 @@
-
 class {'gitblit': }
 
 trac::project {"Izazi":
@@ -7,9 +6,10 @@ trac::project {"Izazi":
 	config				=>	"defaults",
 } 
 
-agilo::project {"Izazi": }
+agilo::project {"Izazi": 
+	require => trac::project['Izazi'],
+}
 
-Class['gitblit'] -> trac::project['Izazi'] -> agilo::project['Izazi']
 
 # Improvemens: 
 # - LDAP Integration

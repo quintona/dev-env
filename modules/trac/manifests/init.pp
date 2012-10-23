@@ -138,8 +138,12 @@ class trac {
     replace => true,
   }
   
+  file {"/etc/apache2/httpd.conf":
+  	content => "ServerName dev-tools"
+  }
+  
   exec {"restart-apache2":
   	command => "/etc/init.d/apache2 restart",
-  	require => [File["/etc/apache2/sites-enabled/trac-site"],File["/etc/apache2/sites-available/trac-site"]],
+  	require => [File["/etc/apache2/sites-enabled/trac-site"],File["/etc/apache2/sites-available/trac-site"],File["/etc/apache2/httpd.conf"]],
   }
 }

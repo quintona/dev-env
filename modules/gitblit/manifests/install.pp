@@ -43,6 +43,14 @@ class gitblit::install ($version = '1.1.0', $parent_dir = '/usr/local/gitblit') 
 		mode => 0777, 
 		require => [ Exec['gitblit_download'], Group['gitblit'], User['gitblit'] ]
 	}
+	
+	file { 'gitblit-repo-folder':
+	    path => "/media/git",
+		owner => 'gitblit', group => 'gitblit',
+	  	ensure => directory,
+		mode => 0777, 
+		require => [ Exec['gitblit_download'], Group['gitblit'], User['gitblit'] ]
+	}
 
 	exec { gitblit_extract:
 		command => "unzip -ao /var/tmp/${download_file} -d ${version_dir}",

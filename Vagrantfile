@@ -6,7 +6,7 @@ Vagrant::Config.run do |config|
   ######################################
   #basic settings
   ######################################
-  use_proxy="false"
+  use_proxy="true"
   config.vm.box = "ubuntu12"
   config.vm.host_name = "dev-tools"
   #config.vm.network :hostonly, "192.168.33.10"
@@ -18,10 +18,7 @@ Vagrant::Config.run do |config|
   config.vm.box_url = "http://dl.dropbox.com/u/1537815/precise64.box"
 
   #shared folders, used to fetch the deployments or other items
-  config.vm.share_folder "v-data", "/vagrant_data", "./data"
-  
-  #the folder that will hold all the git repos, important!
-  config.vm.share_folder "got-repos", "/media/git", "./repos"
+  config.vm.share_folder "v-data", "/vagrant_data", "./data", :owner => "root", :transient => false
   
   #modify system configurations
   config.vm.customize ["modifyvm", :id,
@@ -69,6 +66,9 @@ Vagrant::Config.run do |config|
   	end
   	#do the rest of the provisioning (apply basically)
   	config.vm.provision :shell, :path => "scripts/initProvisioning.sh"
+  	
+  	#the folder that will hold all the git repos, important!
+  	config.vm.share_folder "git-repos", "/media/git", "./repos", :owner => "gitblit", :transient => false
   end
 
  

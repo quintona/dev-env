@@ -1,0 +1,2 @@
+@hourly rsync -ar /usr/local/gitblit/current/git /media/git
+@hourly rsync -ar /var/lib/trac/ /media/trac

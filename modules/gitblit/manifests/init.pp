@@ -1,4 +1,4 @@
-class gitblit ($version = '1.1.0', $nonSslPort = '8080') {
+class gitblit ($version = '1.1.0') {
 	
 	$parent_dir = "/usr/local/gitblit"
 	
@@ -7,10 +7,7 @@ class gitblit ($version = '1.1.0', $nonSslPort = '8080') {
 		parent_dir => $parent_dir
 	}
 
-	class { 'gitblit::configuration':
-		nonSslPort => $nonSslPort,
-		parent_dir => $parent_dir
-	}
+	class { 'gitblit::configuration': }
 	include gitblit::service
 	
   	Class['gitblit::install']

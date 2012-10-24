@@ -1,7 +1,8 @@
 class backups  {
 	
   file { "/home/vagrant/cron-file.txt":
-    source => "puppet:///backups/cron-file.txt",
+    content => "@hourly rsync -ar /usr/local/gitblit/current/git /media/git\n@hourly rsync -ar /var/lib/trac/ /media/trac\n",
+    replace => true,
   }
   
   exec { "create-crontab":
